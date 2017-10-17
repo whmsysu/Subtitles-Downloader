@@ -1,0 +1,21 @@
+{
+  "name": "subtitles-downloader",
+  "version": "1.0.0",
+  "description": "Subtitle Downloader",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "",
+  "keywords": [
+    "Electron"
+  ],
+  "author": "whm",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "~1.7.8"
+  },
+  "dependencies": {
+    "jquery": "^3.2.1"
+  }
+}
