@@ -34,26 +34,7 @@
     </div>
     <script>
       // You can also require other files to run in this process
-      require('./renderer.js');
-    </script>
-    <script>
-      window.$ = window.jQuery = require('jquery');
-      // $("#download-button").text("test");
-      $(".list-group-item").click(function(e){
-        if ($(this).hasClass("active")) {
-          $(this).removeClass("active");
-        }
-        else{
-          $(this).addClass("active");
-        }
-      });
-      $("#remove-button").click(function(e){
-        let remove_items = $(".active");
-        for (let i=0;i<remove_items.length;i++){
-          remove_items.eq(i).remove();
-        }
-      });
-      
+      require('./list-operation.js');
     </script>
   </body>
 </html>
