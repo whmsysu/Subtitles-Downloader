@@ -18,6 +18,7 @@
   "dependencies": {
     "fs": "0.0.1-security",
     "jquery": "^3.2.1",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "shooter": "0.0.8"
   }
 }

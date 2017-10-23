@@ -1,4 +1,4 @@
-function downloadFile(file_url , targetPath){
+exports.downloadFile = function(file_url , targetPath){
     // Save variable to know progress
     var request = require('request');
     var fs = require('fs');
@@ -32,8 +32,4 @@ function downloadFile(file_url , targetPath){
   function showProgress(received,total){
     var percentage = (received * 100) / total;
     console.log(percentage + "% | " + received + " bytes out of " + total + " bytes.");
-  }
-
-  module.exports = {
-    downloadFile : downloadFile
   }

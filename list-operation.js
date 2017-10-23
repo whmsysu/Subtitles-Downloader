@@ -15,7 +15,12 @@ $("#remove-button").click(function(e){
 });
 
 $("#download-button").click(function(e){
-  // //Test download
-  const { downloadFile } = require('./download-helper.js');
-  downloadFile('http://www.pdf995.com/samples/pdf.pdf', '/Users/haominwu/Downloads/save.pdf');
+  
+  //Test download
+  const { downloadShooterSub } = require('./shooter-download-helper.js');
+  const videoFilePath = '/Users/haominwu/Downloads/3.Idiots.2009.1080p.BluRay.x264 DTS-WiKi/3.Idiots.2009.1080p.BluRay.x264 DTS-WiKi.mkv';
+  downloadShooterSub(videoFilePath, null);
+
+  // const { downloadFile } = require('./download-helper.js');
+  // downloadFile('http://www.pdf995.com/samples/pdf.pdf', '/Users/haominwu/Downloads/save.pdf');
 });
