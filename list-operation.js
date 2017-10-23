@@ -66,7 +66,108 @@ addMediaFile = (absolutePath) => {
     + "</li>");
 }
 
-switchToListView();
-for (let i=0;i<1;i++){
-  addMediaFile('/Users/haominwu/Downloads/3.Idiots.2009.1080p.BluRay.x264 DTS-WiKi/3.Idiots.2009.1080p.BluRay.x264 DTS-WiKi.mkv');
+function getExt(filename)
+{
+    let ext = filename.split('.').pop();
+    if(ext == filename) return "";
+    return ext;
 }
+
+function isValidVideoFile(filepath){
+  const VIDEOEXTS = ['avi', 'mp4', 'mkv', 'rmvb', 'rm', 'asf', 'divx', 'mpg', 'mpeg', 'mpe', 'wmv', 'vob'];
+  let now_ext = getExt(filepath);
+  for(let i=0;i<VIDEOEXTS.length;i++){
+    if (now_ext === VIDEOEXTS[i]) return true;
+  }
+  return false;
+}
+
+function getAllFiles(root_path){
+  var fs = require('fs');
+  var res = [] , files = fs.readdirSync(root_path);
+  files.forEach(function(file){
+    var pathname = root_path + '/'+file, stat = fs.lstatSync(pathname);
+    if (!stat.isDirectory()){
+      res.push(pathname);
+    } else {
+      res = res.concat(getAllFiles(pathname));
+    }
+  });
+  return res;
+}
+
+
+function dropFuc(e) {
+  e.preventDefault();
+  
+  var items = e.dataTransfer.items;
+  for(let i=0;i<items.length;i++){
+    var entry = items[i].webkitGetAsEntry();
+    var file = items[i].getAsFile();
+    if (entry.isDirectory){
+      const filepaths = getAllFiles(file.path);
+      for (let i=0;i<filepaths.length;i++){
+        if (isValidVideoFile(filepaths[i])){
+          addMediaFile(filepaths[i]);
+        } 
+      }
+    }
+    else{
+      if (isValidVideoFile(file.path)){
+        addMediaFile(file.path);
+      }
+    }
+    if($(".list-group-item").length > 0){
+      switchToListView();
+    }
+  }
+}
+
+window.onload = function() {
+	(function() {
+    var fileUploader = document.getElementById('drag-view'),
+      fileListUploader = document.getElementById('media-files-list');
+      
+		window.ondragover = function(e) {
+			e.preventDefault();
+			return false
+		};
+    
+    window.ondragend = function(e) {
+			e.preventDefault();
+			return false
+		};
+    
+    window.ondrop = function(e) {
+			e.preventDefault();
+			return false
+		};
+    
+    fileUploader.addEventListener('dragover', function(e) {
+			e.preventDefault();
+			this.classList.add('hover');
+			e.dataTransfer.dropEffect = 'copy';
+    }, false);
+    
+		fileUploader.addEventListener('dragleave', function(e) {
+			e.preventDefault();
+			this.classList.remove('hover');
+    }, false);
+    
+    fileUploader.addEventListener('drop', dropFuc, false);
+    
+    fileListUploader.addEventListener('dragover', function(e) {
+			e.preventDefault();
+			this.classList.add('hover');
+			e.dataTransfer.dropEffect = 'copy';
+    }, false);
+    
+		fileListUploader.addEventListener('dragleave', function(e) {
+			e.preventDefault();
+			this.classList.remove('hover');
+    }, false);
+    
+		fileListUploader.addEventListener('drop', dropFuc, false);
+    
+	})();
+};
