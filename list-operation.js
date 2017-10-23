@@ -15,7 +15,6 @@ $("#remove-button").click(function(e){
 });
 
 $("#download-button").click(function(e){
-  
   //Test download
   const { downloadShooterSub } = require('./shooter-download-helper.js');
   const videoFilePath = '/Users/haominwu/Downloads/3.Idiots.2009.1080p.BluRay.x264 DTS-WiKi/3.Idiots.2009.1080p.BluRay.x264 DTS-WiKi.mkv';
