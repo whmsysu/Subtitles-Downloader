@@ -2,6 +2,8 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
+window.total_download_files = 0;
+
 $("#media-files-list").click(function(e){
   const now_item = e.target;
   if ($(now_item).hasClass("active")){
@@ -30,21 +32,41 @@ $("#remove-button").click(function(e){
 });
 
 $("#download-button").click(function(e){
-  //Test download
+  $(this).text("Searching ...");
+  $(this).prop('disabled', true);
+
   const { downloadShooterSub } = require('./shooter-download-helper.js');
-  const videoFilePath = '/Users/haominwu/Downloads/3.Idiots.2009.1080p.BluRay.x264 DTS-WiKi/3.Idiots.2009.1080p.BluRay.x264 DTS-WiKi.mkv';
-  
-  downloadShooterSub(videoFilePath, null);
-  
+  var listItems = $(".list-group-item");
+  total_download_files = listItems.length;
+  listItems.each(function(idx, li) {
+      if ($(li).attr('is-downloaded') === "1") {
+        window.total_download_files--;
+        if (window.total_download_files === 0) {
+          $("#download-button").text("Donwload All");
+          $("#download-button").prop('disabled', false);
+        }
+        return;
+      }
+      const videoFilePath = $(li).attr('absolute-path');
+      downloadShooterSub(li, videoFilePath);
+  });
+
   // const { downloadFile } = require('./download-helper.js');
   // downloadFile('http://www.pdf995.com/samples/pdf.pdf', '/Users/haominwu/Downloads/save.pdf');
 });
 
 addMediaFile = (absolutePath) => {
   var path = require('path');
-  // console.log(path.basename(absolutePath));
-  $("#media-files-list").append("<li class='list-group-item'>"+ path.basename(absolutePath) + "</li>");
+  $("#media-files-list").append(
+    "<li class='list-group-item'" 
+    + "absolute-path='" + absolutePath + "' "
+    + "is-downloaded='0'"
+    + ">"
+    + path.basename(absolutePath) 
+    + "</li>");
 }
 
 switchToListView();
-addMediaFile('/Users/haominwu/Downloads/3.Idiots.2009.1080p.BluRay.x264 DTS-WiKi/3.Idiots.2009.1080p.BluRay.x264 DTS-WiKi.mkv');
+for (let i=0;i<1;i++){
+  addMediaFile('/Users/haominwu/Downloads/3.Idiots.2009.1080p.BluRay.x264 DTS-WiKi/3.Idiots.2009.1080p.BluRay.x264 DTS-WiKi.mkv');
+}
