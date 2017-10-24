@@ -1,6 +1,3 @@
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
 var fun = require('./import/collections/functions.js');
 const { downloadShooterSub } = require('./shooter-download-helper.js');
 
@@ -47,11 +44,7 @@ $("#download-button").click(function(e){
   // downloadFile('http://www.pdf995.com/samples/pdf.pdf', '/Users/haominwu/Downloads/save.pdf');
 });
 
-window.onload = function() {
-	(function() {
-    var fileUploader = document.getElementById('drag-view'),
-      fileListUploader = document.getElementById('media-files-list');
-      
+var fileUploader = document.getElementById('media-files-list')      
 		window.ondragover = function(e) {
 			e.preventDefault();
 			return false
@@ -79,19 +72,3 @@ window.onload = function() {
     }, false);
     
     fileUploader.addEventListener('drop', fun.dropFuc, false);
-    
-    fileListUploader.addEventListener('dragover', function(e) {
-			e.preventDefault();
-			this.classList.add('hover');
-			e.dataTransfer.dropEffect = 'copy';
-    }, false);
-    
-		fileListUploader.addEventListener('dragleave', function(e) {
-			e.preventDefault();
-			this.classList.remove('hover');
-    }, false);
-    
-		fileListUploader.addEventListener('drop', fun.dropFuc, false);
-    
-	})();
-};
