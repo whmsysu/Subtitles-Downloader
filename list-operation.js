@@ -36,7 +36,7 @@ $("#download-button").click(function(e){
   $(this).prop('disabled', true);
 
   const { downloadShooterSub } = require('./shooter-download-helper.js');
-  var listItems = $(".list-group-item");
+  let listItems = $(".list-group-item");
   total_download_files = listItems.length;
   listItems.each(function(idx, li) {
       if ($(li).attr('is-downloaded') === "1") {
@@ -56,7 +56,7 @@ $("#download-button").click(function(e){
 });
 
 addMediaFile = (absolutePath) => {
-  var path = require('path');
+  const path = require('path');
   $("#media-files-list").append(
     "<li class='list-group-item'" 
     + "absolute-path='" + absolutePath + "' "
