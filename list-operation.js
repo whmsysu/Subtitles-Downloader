@@ -1,6 +1,7 @@
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
+var fun = require('./import/collections/functions.js');
 
 window.total_download_files = 0;
 
@@ -14,20 +15,12 @@ $("#media-files-list").click(function(e){
   }
 });
 
-function backToDragView(){
-  $("#drag-view").css("display", "flex");
-  $("#media-list-view").css("display", "none");
-}
-
-function switchToListView(){
-  $("#drag-view").css("display", "none");
-  $("#media-list-view").css("display", "block");
-}
-
 $("#remove-button").click(function(e){
   $(".active").remove();
   if ($(".list-group-item").length === 0){
-    backToDragView();
+    //backToDragView();
+    fun.backToDragView();
+    //console.log(fun.backToDrageView);
   }
 });
 
@@ -118,7 +111,8 @@ function dropFuc(e) {
       }
     }
     if($(".list-group-item").length > 0){
-      switchToListView();
+      //switchToListView();
+      fun.switchToListView();
     }
   }
 }
