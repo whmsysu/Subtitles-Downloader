@@ -20,7 +20,7 @@ function createWindow () {
   Menu.setApplicationMenu(mainMenu);
 
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({width: 800, height: 600, icon: __dirname + '/icon.png'})
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
@@ -69,8 +69,8 @@ app.on('activate', function () {
 
 function createAboutWindow() {
   aboutWindow = new BrowserWindow({
-    width: 300,
-    height: 300,
+    width: 400,
+    height: 350,
     title: 'About'
   });
   aboutWindow.loadURL(`file://${__dirname}/about.html`);
