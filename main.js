@@ -4,14 +4,21 @@ const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 
+const Menu = electron.Menu
+
 const path = require('path')
 const url = require('url')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let aboutWindow
 
 function createWindow () {
+
+  const mainMenu = Menu.buildFromTemplate(menuTemplate);
+  Menu.setApplicationMenu(mainMenu);
+
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600})
 
@@ -30,7 +37,10 @@ function createWindow () {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    mainWindow = null
+    mainWindow = null;
+    if (aboutWindow != null) aboutWindow.close();
+    aboutWindow = null;
+    app.quit();
   })
 }
 
@@ -43,9 +53,7 @@ app.on('ready', createWindow)
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+  app.quit();
 })
 
 app.on('activate', function () {
@@ -59,3 +67,51 @@ app.on('activate', function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
+function createAboutWindow() {
+  aboutWindow = new BrowserWindow({
+    width: 300,
+    height: 300,
+    title: 'About'
+  });
+  aboutWindow.loadURL(`file://${__dirname}/about.html`);
+  aboutWindow.on('closed', () => aboutWindow = null);
+}
+
+const menuTemplate = [
+  {
+    label: 'File',
+    submenu: [
+      {
+        label: 'About',
+        click() { createAboutWindow(); }
+      },
+      {
+        label: 'Quit',
+        accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
+        click() {
+          app.quit();
+        }
+      }
+    ]
+  }
+];
+
+if (process.platform === 'darwin') {
+  menuTemplate.unshift({});
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  menuTemplate.push({
+    label: 'View',
+    submenu: [
+      { role: 'reload' },
+      {
+        label: 'Toggle Developer Tools',
+        accelerator: process.platform === 'darwin' ? 'Command+Alt+I' : 'Ctrl+Shift+I',
+        click(item, focusedWindow) {
+          focusedWindow.toggleDevTools();
+        }
+      }
+    ]
+  });
+}
