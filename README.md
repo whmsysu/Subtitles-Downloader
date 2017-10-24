@@ -9,8 +9,7 @@ Subtitles source is from Shooter.
 ***
 ## Next version
 1. We will introduce more subtitles source. People will choose the better source. 
-2. Develop a user system. People can vote the quality of subtitle which helps us to calculate which source is better for the specific movie because different subtitle maker will release their subtitles in the different web site. With user system, we can recommend the best subtitles depending on users' vote. 
-3. We will develop other tiny functions and a better view of the app.
+2. We will develop other tiny functions and a better view of the app.
 
 ***
 ## Devlopment
