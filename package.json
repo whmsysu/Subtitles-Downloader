@@ -17,6 +17,7 @@
     "electron": "~1.7.8"
   },
   "dependencies": {
+    "eventproxy": "^1.0.0",
     "fs": "0.0.1-security",
     "jquery": "^3.2.1",
     "request": "^2.83.0",
