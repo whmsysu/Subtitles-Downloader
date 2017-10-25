@@ -56,20 +56,20 @@ var dropFuc = function(e) {
             var entry = items[i].webkitGetAsEntry();
             var file = items[i].getAsFile();
             if (entry.isDirectory){
-            const filepaths = getAllFiles(file.path);
-            for (let i=0;i<filepaths.length;i++){
-                if (isValidVideoFile(filepaths[i])){
-                addMediaFile(filepaths[i]);
-                } 
-            }
+                const filepaths = getAllFiles(file.path);
+                for (let i=0;i<filepaths.length;i++){
+                    if (isValidVideoFile(filepaths[i])){
+                        addMediaFile(filepaths[i]);
+                    } 
+                }
             }
             else{
-            if (isValidVideoFile(file.path)){
-                addMediaFile(file.path);
-            }
+                if (isValidVideoFile(file.path)){
+                    addMediaFile(file.path);
+                }
             }
             if($(".list-group-item").length > 0){
-            switchToListView();
+                switchToListView();
             }
         }
     }
