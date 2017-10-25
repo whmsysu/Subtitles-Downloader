@@ -50,13 +50,14 @@ exports.downloadShooterSub = (li, videoFilePath) => {
     const Fn = require('shooter').API.fetch;
     const path = require('path');
     Fn(videoFilePath, function (err, res) {
-        window.ep.emit('api_callback', {});
         if (!err) {
+            window.ep.emit('api_callback', {});
             $(li).css("text-decoration", "line-through");
             $(li).attr("is-downloaded", 1);
             console.log(path.basename(videoFilePath), '->', res);
         } else {
             console.log(err);
+            downloadZimukuSub(li, videoFilePath);
         }
     });
 };

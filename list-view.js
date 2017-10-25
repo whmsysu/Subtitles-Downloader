@@ -37,8 +37,7 @@ $("#download-button").click(function (e) {
 			return;
 		}
 		const videoFilePath = $(li).attr('absolute-path');
-		// downloadShooterSub(li, videoFilePath);
-		downloadZimukuSub(li, videoFilePath);
+		downloadShooterSub(li, videoFilePath);
 	});
 
 });
