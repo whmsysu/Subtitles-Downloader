@@ -44,20 +44,6 @@ $("#download-button").click(function(e){
 });
 
 var fileUploader = document.getElementById('media-files-list')      
-window.ondragover = function(e) {
-  e.preventDefault();
-  return false
-};
-
-window.ondragend = function(e) {
-  e.preventDefault();
-  return false
-};
-
-window.ondrop = function(e) {
-  e.preventDefault();
-  return false
-};
 
 fileUploader.addEventListener('dragover', function(e) {
   e.preventDefault();

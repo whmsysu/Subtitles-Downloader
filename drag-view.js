@@ -1,7 +1,22 @@
 var fun = require('./import/collections/functions.js');
 
 var fileUploader = document.getElementById('drag-view');
-  
+
+window.ondragover = function(e) {
+  e.preventDefault();
+  return false
+};
+
+window.ondragend = function(e) {
+  e.preventDefault();
+  return false
+};
+
+window.ondrop = function(e) {
+  e.preventDefault();
+  return false
+};
+
 fileUploader.addEventListener('dragover', function(e) {
 	e.preventDefault();
 	this.classList.add('hover');
