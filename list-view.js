@@ -1,7 +1,7 @@
-var fun = require('./import/collections/functions.js');
+let fun = require('./import/collections/functions.js');
 const { downloadShooterSub } = require('./shooter-download-helper.js');
 
-var EventProxy = require('eventproxy');
+let EventProxy = require('eventproxy');
 window.ep = new EventProxy();
 
 $("#media-files-list").click(function(e){
@@ -43,7 +43,7 @@ $("#download-button").click(function(e){
   // downloadFile('http://www.pdf995.com/samples/pdf.pdf', '/Users/haominwu/Downloads/save.pdf');
 });
 
-var fileUploader = document.getElementById('media-files-list')      
+let fileUploader = document.getElementById('media-files-list')      
 
 fileUploader.addEventListener('dragover', function(e) {
   e.preventDefault();

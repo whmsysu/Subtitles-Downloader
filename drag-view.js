@@ -1,6 +1,6 @@
-var fun = require('./import/collections/functions.js');
+let fun = require('./import/collections/functions.js');
 
-var fileUploader = document.getElementById('drag-view');
+let fileUploader = document.getElementById('drag-view');
 
 window.ondragover = function(e) {
   e.preventDefault();

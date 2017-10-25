@@ -26,10 +26,10 @@ function isValidVideoFile(filepath){
 }
 
 function getAllFiles(root_path){
-  var fs = require('fs');
-  var res = [] , files = fs.readdirSync(root_path);
+  let fs = require('fs');
+  let res = [] , files = fs.readdirSync(root_path);
   files.forEach(function(file){
-    var pathname = root_path + '/'+file, stat = fs.lstatSync(pathname);
+    let pathname = root_path + '/'+file, stat = fs.lstatSync(pathname);
     if (!stat.isDirectory()){
       res.push(pathname);
     } else {
@@ -39,22 +39,22 @@ function getAllFiles(root_path){
   return res;
 }
 
-var backToDragView = function() {
+let backToDragView = function() {
     $("#drag-view").css("display", "flex");
     $("#media-list-view").css("display", "none");
 }
 
-var switchToListView = function() {
+let switchToListView = function() {
     $("#drag-view").css("display", "none");
     $("#media-list-view").css("display", "block");
 }
 
-var dropFuc = function(e) {
+let dropFuc = function(e) {
         e.preventDefault();
-        var items = e.dataTransfer.items;
+        let items = e.dataTransfer.items;
         for(let i=0;i<items.length;i++){
-            var entry = items[i].webkitGetAsEntry();
-            var file = items[i].getAsFile();
+            let entry = items[i].webkitGetAsEntry();
+            let file = items[i].getAsFile();
             if (entry.isDirectory){
                 const filepaths = getAllFiles(file.path);
                 for (let i=0;i<filepaths.length;i++){
