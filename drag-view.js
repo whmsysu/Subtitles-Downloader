@@ -1,4 +1,4 @@
-let fun = require('./import/collections/functions.js');
+const fun = require('./import/collections/functions.js');
 
 let fileUploader = document.getElementById('drag-view');
 
