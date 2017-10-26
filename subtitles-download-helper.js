@@ -101,8 +101,6 @@ exports.downloadZimukuSub = (li, videoFilePath) => {
                             }
                         }
                     }
-
-                    //   
                 }
             }
             if (bestMatch === null) {
@@ -117,7 +115,12 @@ exports.downloadZimukuSub = (li, videoFilePath) => {
                             let $download_element = $($('#down1'));
                             downloadFile(li, zimuku_baseurl + $download_element.attr('href'), path.dirname(videoFilePath));
                         }
+                        else {
+                            window.ep.emit('api_callback', {});
+                        }
                     });
             }
         });
+
 }
+
