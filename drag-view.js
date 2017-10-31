@@ -3,29 +3,29 @@ const fun = require('./import/collections/functions.js');
 let fileUploader = document.getElementById('drag-view');
 
 window.ondragover = function (e) {
-    e.preventDefault();
-    return false
+  e.preventDefault();
+  return false
 };
 
 window.ondragend = function (e) {
-    e.preventDefault();
-    return false
+  e.preventDefault();
+  return false
 };
 
 window.ondrop = function (e) {
-    e.preventDefault();
-    return false
+  e.preventDefault();
+  return false
 };
 
 fileUploader.addEventListener('dragover', function (e) {
-    e.preventDefault();
-    this.classList.add('hover');
-    e.dataTransfer.dropEffect = 'copy';
+  e.preventDefault();
+  this.classList.add('hover');
+  e.dataTransfer.dropEffect = 'copy';
 }, false);
 
 fileUploader.addEventListener('dragleave', function (e) {
-    e.preventDefault();
-    this.classList.remove('hover');
+  e.preventDefault();
+  this.classList.remove('hover');
 }, false);
 
 fileUploader.addEventListener('drop', fun.dropFuc, false);
