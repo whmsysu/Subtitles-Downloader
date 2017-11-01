@@ -55,20 +55,16 @@ class App extends React.Component {
         };
     }
 
-    addMediaFile(absolutePath) {
+    addMediaFiles(absolutePaths) {
         this.setState({
-            file_list: this.state.file_list.concat({
-                name: path.basename(absolutePath),
-                absolute_path: absolutePath,
-            })
+            file_list: this.state.file_list.concat(absolutePaths)
         });
-        console.log(absolutePath);
-        console.log(this.state.file_list);
     }
 
     handleDrop(e) {
         e.preventDefault();
         let items = e.dataTransfer.items;
+        let adding_files = [];
         for (let i = 0; i < items.length; i++) {
             let entry = items[i].webkitGetAsEntry();
             let file = items[i].getAsFile();
@@ -76,17 +72,24 @@ class App extends React.Component {
                 const filepaths = getAllFiles(file.path);
                 for (let i = 0; i < filepaths.length; i++) {
                     if (isValidVideoFile(filepaths[i])) {
-                        this.addMediaFile(filepaths[i]);
+                        adding_files = adding_files.concat({
+                            name: path.basename(filepaths[i]),
+                            absolute_path:filepaths[i]
+                        });
                     }
                 }
             }
             else {
                 if (isValidVideoFile(file.path)) {
                     console.log(file.path);
-                    this.addMediaFile(file.path);
+                    adding_files = adding_files.concat({
+                        name: path.basename(file.path),
+                        absolute_path: file.path
+                    });
                 }
             }
         }
+        this.addMediaFiles(adding_files);
     }
 
     render() {
@@ -104,7 +107,7 @@ class App extends React.Component {
         }
         else {
             return (
-                <div id="media-list-view">
+                <div id="media-list-view" onDrop={(event) => this.handleDrop(event)}>
                     <ul className={"list-group"} id="media-files-list">
                         { 
                             file_list.map(function(file){
