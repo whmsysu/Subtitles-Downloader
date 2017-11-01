@@ -20,10 +20,6 @@ body {
     font-size:30px;
 }
 
-#media-list-view {
-    display: none;
-}
-
 #media-files-list {
     height:400px;
     overflow: scroll;
