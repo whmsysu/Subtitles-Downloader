@@ -32,7 +32,3 @@ body {
 #media-list-view > div {
     width: 100%;
 }
-
-#remove-button {
-    float: right;
-}

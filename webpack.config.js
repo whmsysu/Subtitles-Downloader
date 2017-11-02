@@ -1,5 +1,5 @@
 module.exports = {
-    target: 'electron-renderer',
+    target: 'node',
     entry: [
       './view.js'
     ],
