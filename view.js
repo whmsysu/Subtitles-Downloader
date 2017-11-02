@@ -2,8 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import fs from 'fs';
 import path from 'path';
-// import superagent from 'superagent';
-
+import superagent from 'superagent/superagent';
+import cheerio from 'cheerio';
+import stringSimilarity from 'string-similarity';
 
 window.ondragover = function (e) {
     e.preventDefault();
@@ -87,7 +88,6 @@ class App extends React.Component {
             }
             else {
                 if (isValidVideoFile(file.path)) {
-                    console.log(file.path);
                     adding_files = adding_files.concat({
                         name: path.basename(file.path),
                         absolute_path: file.path,
@@ -163,6 +163,122 @@ class App extends React.Component {
         return filename;
     }
 
+    showProgress(received, total) {
+        let percentage = (received * 100) / total;
+        // console.log(percentage + "% | " + received + " bytes out of " + total + " bytes.");
+    }
+
+    downloadFile(name, file_url, targetDirectory) {
+        // Save variable to know progress
+        let request = require('request');
+        let fs = require('fs');
+        let received_bytes = 0;
+        let total_bytes = 0;
+        let req = request({
+            method: 'GET',
+            uri: file_url
+        });
+        const now_class = this;
+
+        req.on('response', function (data) {
+            // Change the total bytes value to get progress later.
+            // console.log(data);
+            total_bytes = parseInt(data.headers['content-length']);
+            let targetPath = `${targetDirectory}/${now_class.getFilenameFromHeaderDisposition(data.headers['content-disposition'])}`;
+            let out = fs.createWriteStream(targetPath);
+            req.pipe(out);
+        });
+
+        req.on('data', function (chunk) {
+            // Update the received bytes
+            received_bytes += chunk.length;
+            now_class.showProgress(received_bytes, total_bytes);
+        });
+
+        req.on('end', function () {
+            if (now_class.getStatusByName(name) === 'Pending') {
+                now_class.setStatusByName(name, 'Downloaded');
+                now_class.setState({
+                    download_thread: now_class.state.download_thread - 1
+                });
+            }
+        });
+    }
+
+    downloadZimukuSub(name, videoFilePath) {
+        const zimuku_baseurl = 'http://www.zimuku.net';
+        const filenameWithExt = path.basename(videoFilePath);
+        const filename = filenameWithExt.substr(0, filenameWithExt.lastIndexOf('.'));
+        const now_class = this;
+        superagent.get(`${zimuku_baseurl}/search?q=${filename}`)
+            .end(function (err, sres) {
+                if (err) {
+                    console.log(err);
+                    if (now_class.getStatusByName(name) === 'Pending') {
+                        now_class.setStatusByName(name, 'Fail');
+                        now_class.setState({
+                            download_thread: now_class.state.download_thread - 1
+                        });
+                    }
+                    return;
+                }
+                let $ = cheerio.load(sres.text);
+                let items = $('a');
+                let bestMatch = null;
+                
+                for (let i = 0; i < items.length; i++) {
+                    let $element = $(items[i]);
+                    if ($element.attr('href').startsWith('/detail')) {
+                        if (bestMatch === null) {
+                            bestMatch = {
+                                'href': $element.attr('href'),
+                                'name': $element.text(),
+                                'similarity': stringSimilarity.compareTwoStrings(filenameWithExt, $element.text())
+                            }
+                        }
+                        else {
+                            let now_similarity = stringSimilarity.compareTwoStrings(filenameWithExt, $element.text())
+                            if (now_similarity > bestMatch.similarity) {
+                                bestMatch = {
+                                    'href': $element.attr('href'),
+                                    'name': $element.text(),
+                                    'similarity': stringSimilarity.compareTwoStrings(filenameWithExt, $element.text())
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                if (bestMatch === null) {
+                    if (now_class.getStatusByName(name) === 'Pending') {
+                        now_class.setStatusByName(name, 'Fail');
+                        now_class.setState({
+                            download_thread: now_class.state.download_thread - 1
+                        });
+                    }
+                    return;
+                }
+                else {
+                    superagent.get(zimuku_baseurl + bestMatch.href)
+                        .end(function (err, sres) {
+                            if (!err) {
+                                let $ = cheerio.load(sres.text);
+                                let $download_element = $($('#down1'));
+                                now_class.downloadFile(name, zimuku_baseurl + $download_element.attr('dlurl'), path.dirname(videoFilePath));
+                            }
+                            else {
+                                if (now_class.getStatusByName(name) === 'Pending') {
+                                    now_class.setStatusByName(name, 'Fail');
+                                    now_class.setState({
+                                        download_thread: now_class.state.download_thread - 1
+                                    });
+                                }
+                            }
+                        });
+                }
+            });
+
+    }
 
     downloadShooterSub(name, videoFilePath) {
         const Fn = require('shooter').API.fetch;
@@ -197,7 +313,7 @@ class App extends React.Component {
                 });
             }
             else {
-                // this.downloadShooterSub(file_list[i].name, file_list[i].absolute_path);
+                this.downloadShooterSub(file_list[i].name, file_list[i].absolute_path);
                 // this.downloadZimukuSub(file_list[i].name, file_list[i].absolute_path);
             }
         }
@@ -220,9 +336,22 @@ class App extends React.Component {
     render() {
         const file_list = this.state.file_list;
         if (file_list.length === 0) {
+            const style = {
+                width:'100%',
+                height: '400px',
+                border:'1px rgb(193, 138, 138) solid', 
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '1px 1px 1px rgb(185, 184, 184)'
+            };
+            const dragArea = {
+                textAlign: 'center',
+                fontSize: '30px'
+            };
             return (
-                <div id="drag-view" onDrop={(event) => this.handleDrop(event)}>
-                    <div id="drag-area">
+                <div style={ style } onDrop={(event) => this.handleDrop(event)}>
+                    <div style={ dragArea }>
                         +
                         <br />
                         Drag file or folder to this area
@@ -231,9 +360,16 @@ class App extends React.Component {
             );
         }
         else {
+            const style={
+                height: '400px',
+                overflow: 'scroll',
+                overflowX: 'hidden',
+                userSelect:'none',
+                cursor: 'pointer'
+            };
             return (
                 <div id="media-list-view">
-                    <ul className={"list-group"} id="media-files-list" onDrop={(event) => this.handleDrop(event)} onClick={(event) => this.handleItemClick(event)}>
+                    <ul className={"list-group"} style={ style } onDrop={(event) => this.handleDrop(event)} onClick={(event) => this.handleItemClick(event)}>
                         {
                             file_list.map(function (file) {
                                 let style = {
