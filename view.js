@@ -336,7 +336,7 @@ class App extends React.Component {
     render() {
         const file_list = this.state.file_list;
         if (file_list.length === 0) {
-            const style = {
+            const containerStyle = {
                 width:'100%',
                 height: '400px',
                 border:'1px rgb(193, 138, 138) solid', 
@@ -345,13 +345,13 @@ class App extends React.Component {
                 justifyContent: 'center',
                 boxShadow: '1px 1px 1px rgb(185, 184, 184)'
             };
-            const dragArea = {
+            const dragAreaStyle = {
                 textAlign: 'center',
                 fontSize: '30px'
             };
             return (
-                <div style={ style } onDrop={(event) => this.handleDrop(event)}>
-                    <div style={ dragArea }>
+                <div style={ containerStyle } onDrop={(event) => this.handleDrop(event)}>
+                    <div style={ dragAreaStyle }>
                         +
                         <br />
                         Drag file or folder to this area
