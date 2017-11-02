@@ -225,7 +225,7 @@ class App extends React.Component {
                 let $ = cheerio.load(sres.text);
                 let items = $('a');
                 let bestMatch = null;
-                
+
                 for (let i = 0; i < items.length; i++) {
                     let $element = $(items[i]);
                     if ($element.attr('href').startsWith('/detail')) {
@@ -248,7 +248,7 @@ class App extends React.Component {
                         }
                     }
                 }
-                
+
                 if (bestMatch === null) {
                     if (now_class.getStatusByName(name) === 'Pending') {
                         now_class.setStatusByName(name, 'Fail');
@@ -337,9 +337,9 @@ class App extends React.Component {
         const file_list = this.state.file_list;
         if (file_list.length === 0) {
             const containerStyle = {
-                width:'100%',
+                width: '100%',
                 height: '400px',
-                border:'1px rgb(193, 138, 138) solid', 
+                border: '1px rgb(193, 138, 138) solid',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -350,8 +350,8 @@ class App extends React.Component {
                 fontSize: '30px'
             };
             return (
-                <div style={ containerStyle } onDrop={(event) => this.handleDrop(event)}>
-                    <div style={ dragAreaStyle }>
+                <div style={containerStyle} onDrop={(event) => this.handleDrop(event)}>
+                    <div style={dragAreaStyle}>
                         +
                         <br />
                         Drag file or folder to this area
@@ -360,16 +360,16 @@ class App extends React.Component {
             );
         }
         else {
-            const style={
+            const style = {
                 height: '400px',
                 overflow: 'scroll',
                 overflowX: 'hidden',
-                userSelect:'none',
+                userSelect: 'none',
                 cursor: 'pointer'
             };
             return (
                 <div id="media-list-view">
-                    <ul className={"list-group"} style={ style } onDrop={(event) => this.handleDrop(event)} onClick={(event) => this.handleItemClick(event)}>
+                    <ul className={"list-group"} style={style} onDrop={(event) => this.handleDrop(event)} onClick={(event) => this.handleItemClick(event)}>
                         {
                             file_list.map(function (file) {
                                 let style = {
