@@ -1,6 +1,6 @@
 {
   "name": "subtitles-downloader",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Subtitle Downloader",
   "main": "main.js",
   "scripts": {
@@ -31,7 +31,6 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
     "fs": "0.0.1-security",
-    "jquery": "^3.2.1",
     "request": "^2.83.0",
     "shooter": "0.0.8",
     "string-similarity": "^1.2.0",
