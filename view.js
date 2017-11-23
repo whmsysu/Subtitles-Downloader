@@ -301,16 +301,16 @@ class App extends React.Component {
 
     handleDownloadClick(event) {
         const file_list = this.state.file_list;
-
+        let arrayLength = file_list.length;
         this.setState({
-            download_thread: file_list.length
+            download_thread: arrayLength
         });
-
         for (let i = 0; i < file_list.length; i++) {
             if (file_list[i].status === 'Downloaded' || file_list[i].status === 'Fail') {
-                this.setState({
-                    download_thread: this.state.download_thread - 1
-                });
+              arrayLength--;
+              this.setState({
+                download_thread: arrayLength
+              });
             }
             else {
                 this.downloadShooterSub(file_list[i].name, file_list[i].absolute_path);
