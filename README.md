@@ -6,6 +6,5 @@ Drag the movies or folder containing movies to the window, and SD will find thes
 Subtitles source is from Shooter and Zimuku.net
 ***
 
-***
 ## Devlopment
 If you are interested in our app or have some idea, please contact us. 
