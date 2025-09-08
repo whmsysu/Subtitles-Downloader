@@ -167,6 +167,7 @@ If you are interested in this project or have any suggestions, please contact us
 - **Smart Status Display**: Emoji icons and color coding for file status
 - **Responsive Interaction**: Hover effects and selection state highlighting
 - **Real-time Statistics**: Display total files, selected count, and downloaded count
+- **Clean Interface**: Simplified UI without unnecessary debugging tools
 
 ### Convenient Operations
 - **One-click Select All**: Quickly select all files for batch operations
@@ -175,6 +176,7 @@ If you are interested in this project or have any suggestions, please contact us
 - **File Management**: Support removing unwanted files
 - **Error Messages**: User-friendly error messages and success notifications
 - **Progress Display**: Real-time download progress and status indicators
+- **Keyboard Shortcuts**: Ctrl+A (Select All), Ctrl+D (Download), Delete (Remove), Esc (Clear Messages)
 
 ## Changelog
 
@@ -191,6 +193,9 @@ If you are interested in this project or have any suggestions, please contact us
 - 🛠️ Fixed Electron menu template errors
 - 🔧 Fixed Node.js module loading issues
 - 🎯 Fixed download button display logic
+- 🧹 Simplified interface by removing debug mode and network test buttons
+- ⚡ Optimized download process by removing pre-download network checks
+- 🎯 Enhanced user focus on core subtitle downloading functionality
 
 ### v1.0.1
 - Initial version release
