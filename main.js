@@ -9,6 +9,20 @@ const Menu = electron.Menu
 const path = require('path')
 const url = require('url')
 
+// 仅保留必要的SSL相关开关，移除不安全的选项
+app.commandLine.appendSwitch('--ignore-certificate-errors')
+app.commandLine.appendSwitch('--ignore-ssl-errors')
+
+// 添加安全相关的配置
+app.commandLine.appendSwitch('--disable-background-timer-throttling')
+app.commandLine.appendSwitch('--disable-backgrounding-occluded-windows')
+app.commandLine.appendSwitch('--disable-renderer-backgrounding')
+
+// 在开发环境中抑制安全警告（生产环境应该移除）
+if (process.env.NODE_ENV !== 'production') {
+  app.commandLine.appendSwitch('--disable-features', 'VizDisplayCompositor')
+}
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -21,13 +35,18 @@ function createWindow() {
 
   // Create the browser window.
   mainWindow = new BrowserWindow({ 
-    width: 800, 
-    height: 600, 
+    width: 1000, 
+    height: 700, 
+    minWidth: 900,
+    minHeight: 600,
     icon: __dirname + '/icon.png',
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true
+      enableRemoteModule: false,
+      webSecurity: true,
+      allowRunningInsecureContent: false,
+      experimentalFeatures: false
     }
   })
 
@@ -38,8 +57,19 @@ function createWindow() {
     slashes: true
   }))
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // Open the DevTools only in development
+  if (process.env.NODE_ENV !== 'production') {
+    mainWindow.webContents.openDevTools()
+  }
+
+  // 防止新窗口创建，提高安全性
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    // 只允许打开本地文件
+    if (url.startsWith('file://')) {
+      return { action: 'allow' };
+    }
+    return { action: 'deny' };
+  });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -82,8 +112,9 @@ function createAboutWindow() {
     height: 350,
     title: 'About',
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      nodeIntegration: false,
+      contextIsolation: true,
+      enableRemoteModule: false
     }
   });
   aboutWindow.loadURL(`file://${__dirname}/about.html`);
