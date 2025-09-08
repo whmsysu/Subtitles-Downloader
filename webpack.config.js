@@ -1,7 +1,8 @@
 module.exports = {
+    mode: 'development',
     target: 'node',
     entry: [
-      './view.js'
+      './view-fixed.js'
     ],
     output: {
       path: __dirname,
@@ -9,14 +10,19 @@ module.exports = {
       filename: 'bundle.js'
     },
     module: {
-      loaders: [{
+      rules: [{
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['react', 'es2015']
-        },
-      }
-      ]
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react']
+          }
+        }
+      }]
     },
+    resolve: {
+      extensions: ['.js', '.jsx']
+    }
   };
   

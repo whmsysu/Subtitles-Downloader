@@ -20,7 +20,16 @@ function createWindow() {
   Menu.setApplicationMenu(mainMenu);
 
   // Create the browser window.
-  mainWindow = new BrowserWindow({ width: 800, height: 600, icon: __dirname + '/icon.png' })
+  mainWindow = new BrowserWindow({ 
+    width: 800, 
+    height: 600, 
+    icon: __dirname + '/icon.png',
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true
+    }
+  })
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
@@ -30,7 +39,7 @@ function createWindow() {
   }))
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -71,7 +80,11 @@ function createAboutWindow() {
   aboutWindow = new BrowserWindow({
     width: 400,
     height: 350,
-    title: 'About'
+    title: 'About',
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    }
   });
   aboutWindow.loadURL(`file://${__dirname}/about.html`);
   aboutWindow.on('closed', () => aboutWindow = null);
@@ -97,7 +110,38 @@ const menuTemplate = [
 ];
 
 if (process.platform === 'darwin') {
-  menuTemplate.unshift({});
+  menuTemplate.unshift({
+    label: app.getName(),
+    submenu: [
+      {
+        role: 'about'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        role: 'services'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        role: 'hide'
+      },
+      {
+        role: 'hideothers'
+      },
+      {
+        role: 'unhide'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        role: 'quit'
+      }
+    ]
+  });
 }
 
 if (process.env.NODE_ENV !== 'production') {
