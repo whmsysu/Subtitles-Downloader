@@ -81,95 +81,78 @@ The built application will be generated in the `builds` directory.
 
 ```mermaid
 graph TB
-    subgraph "用户界面层 (UI Layer)"
-        A[主窗口 MainWindow] --> B[拖拽区域 Drag Area]
-        A --> C[文件列表 File List]
-        A --> D[操作按钮 Action Buttons]
-        A --> E[状态显示 Status Display]
-        A --> F[关于窗口 About Window]
+    subgraph "🎨 用户界面层"
+        A[Electron 主窗口<br/>1000x700px]
+        B[React 应用<br/>拖拽 + 文件列表]
     end
 
-    subgraph "应用层 (Application Layer)"
-        G[主进程 Main Process<br/>main.js] --> H[窗口管理 Window Management]
-        G --> I[菜单管理 Menu Management]
-        G --> J[安全配置 Security Config]
-        
-        K[预加载脚本 Preload<br/>preload.js] --> L[上下文桥接 Context Bridge]
-        
-        M[渲染进程 Renderer Process] --> N[React应用 React App]
-        N --> O[文件管理 File Management]
-        N --> P[状态管理 State Management]
-        N --> Q[事件处理 Event Handling]
+    subgraph "⚙️ 应用层"
+        C[主进程 main.js<br/>窗口管理]
+        D[预加载脚本 preload.js<br/>安全桥接]
+        E[渲染进程<br/>React + 状态管理]
     end
 
-    subgraph "业务逻辑层 (Business Logic Layer)"
-        R[文件处理 File Processing] --> S[视频文件验证 Video Validation]
-        R --> T[文件系统操作 File System Ops]
-        
-        U[字幕下载 Subtitle Download] --> V[Shooter API]
-        U --> W[Zimuku.net 爬虫]
-        U --> X[本地字幕搜索 Local Search]
-        
-        Y[智能匹配 Smart Matching] --> Z[字符串相似度 String Similarity]
-        Y --> AA[文件名解析 Filename Parsing]
+    subgraph "🔧 业务逻辑层"
+        F[文件处理<br/>12种视频格式]
+        G[字幕下载<br/>多源策略]
+        H[智能匹配<br/>字符串相似度]
     end
 
-    subgraph "数据层 (Data Layer)"
-        BB[本地文件系统 Local File System] --> CC[视频文件 Video Files]
-        BB --> DD[字幕文件 Subtitle Files]
-        
-        EE[外部API External APIs] --> FF[Shooter字幕服务 Shooter Service]
-        EE --> GG[Zimuku网站 Zimuku Website]
+    subgraph "💾 数据层"
+        I[本地文件系统<br/>视频 + 字幕文件]
+        J[外部API<br/>Shooter + Zimuku]
     end
 
-    subgraph "构建工具 (Build Tools)"
-        HH[Webpack配置 Webpack Config] --> II[Babel转译 Babel Transform]
-        HH --> JJ[模块打包 Module Bundling]
-        
-        KK[Electron打包 Electron Packager] --> LL[跨平台构建 Cross-platform Build]
+    subgraph "🛠️ 构建工具"
+        K[Webpack + Babel<br/>代码打包转译]
+        L[Electron Packager<br/>跨平台打包]
     end
 
-    subgraph "依赖库 (Dependencies)"
-        MM[核心依赖 Core Dependencies]
-        MM --> NN[axios - HTTP请求]
-        MM --> OO[cheerio - HTML解析]
-        MM --> PP[string-similarity - 字符串匹配]
-        MM --> QQ[shooter - 字幕API]
-        
-        RR[开发依赖 Dev Dependencies]
-        RR --> SS[React - UI框架]
-        RR --> TT[Electron - 桌面框架]
-        RR --> UU[Webpack - 构建工具]
-        RR --> VV[Babel - 代码转译]
-    end
-
-    %% 连接关系
-    A --> G
-    M --> R
-    M --> U
-    M --> Y
-    R --> BB
-    U --> EE
-    Y --> MM
-    G --> HH
-    M --> HH
-    HH --> RR
+    %% 主要连接关系
+    A --> C
+    B --> E
+    C --> D
+    D --> E
+    E --> F
+    E --> G
+    E --> H
+    F --> I
+    G --> J
+    H --> I
+    C --> K
+    E --> K
+    K --> L
 
     %% 样式定义
-    classDef uiLayer fill:#e1f5fe
-    classDef appLayer fill:#f3e5f5
-    classDef businessLayer fill:#e8f5e8
-    classDef dataLayer fill:#fff3e0
-    classDef buildLayer fill:#fce4ec
-    classDef depLayer fill:#f1f8e9
+    classDef uiLayer fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef appLayer fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef businessLayer fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    classDef dataLayer fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    classDef buildLayer fill:#fce4ec,stroke:#c2185b,stroke-width:2px
 
-    class A,B,C,D,E,F uiLayer
-    class G,H,I,J,K,L,M,N,O,P,Q appLayer
-    class R,S,T,U,V,W,X,Y,Z,AA businessLayer
-    class BB,CC,DD,EE,FF,GG dataLayer
-    class HH,II,JJ,KK,LL buildLayer
-    class MM,NN,OO,PP,QQ,RR,SS,TT,UU,VV depLayer
+    class A,B uiLayer
+    class C,D,E appLayer
+    class F,G,H businessLayer
+    class I,J dataLayer
+    class K,L buildLayer
 ```
+
+### 核心组件说明
+
+| 层级 | 组件 | 功能描述 |
+|------|------|----------|
+| 🎨 **UI层** | Electron主窗口 | 桌面应用窗口，支持拖拽操作 |
+| | React应用 | 用户界面，文件列表和状态显示 |
+| ⚙️ **应用层** | 主进程 | 窗口生命周期、菜单管理、安全配置 |
+| | 预加载脚本 | 安全的上下文桥接，IPC通信 |
+| | 渲染进程 | React应用主体，状态和事件处理 |
+| 🔧 **业务层** | 文件处理 | 视频格式验证，文件系统操作 |
+| | 字幕下载 | 多源下载策略（Shooter + Zimuku + 本地） |
+| | 智能匹配 | 字符串相似度算法，文件名解析 |
+| 💾 **数据层** | 本地文件系统 | 视频文件和字幕文件存储 |
+| | 外部API | Shooter字幕服务，Zimuku网站数据 |
+| 🛠️ **构建层** | Webpack + Babel | 代码打包和ES6+转译 |
+| | Electron Packager | 跨平台应用打包 |
 
 ### Architecture Overview
 
